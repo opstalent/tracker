@@ -15,10 +15,7 @@ Example call: `http://localhost:8080/issues??offset=0&limit=1000`
 
 ```shell
 $ go get github.com/opstalent/tracker
-```
-
-```shell
-$ go ./main.go username password
+$ tracker username password
 ```
 
 License
