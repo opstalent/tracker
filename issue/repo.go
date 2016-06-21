@@ -7,7 +7,7 @@ import (
 	"github.com/opstalent/tracker/controller"
 )
 
-func get(ctx context.Context, r *http.Request) (*Issues, error) {
+func Get(ctx context.Context, r *http.Request) (*Issues, error) {
 	var (
 		err error
 		url string

@@ -18,7 +18,7 @@ type Data struct {
 }
 
 func listHandler(ctx context.Context, w http.ResponseWriter, r *http.Request) {
-	issues, err := get(ctx, r)
+	issues, err := Get(ctx, r)
 	if err != nil {
 		log := logger.New()
 		log.Critical(ctx, "%s", err)

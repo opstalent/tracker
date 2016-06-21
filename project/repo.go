@@ -7,7 +7,7 @@ import (
 	"github.com/opstalent/tracker/controller"
 )
 
-func getById(ctx context.Context, r *http.Request, id string) (*Project, error) {
+func GetById(ctx context.Context, r *http.Request, id string) (*Project, error) {
 	var (
 		err error
 		url string

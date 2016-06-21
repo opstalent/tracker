@@ -3,6 +3,7 @@ package project
 import (
 	"time"
 	"github.com/opstalent/tracker/resource"
+	"github.com/opstalent/tracker/issue"
 )
 
 const (
@@ -17,9 +18,9 @@ type (
 		Description string                   `json:"description"`
 		Homepage    string                   `json:"homepage"`
 		Status      int                      `json:"status"`
-		//CustomFields []resource.CustomField   `json:"custom_fields"`
 		Parent      resource.Field           `json:"parent"`
 		Created     time.Time                `json:"created_on"`
 		Updated     time.Time                `json:"updated_on"`
+		Issues      *issue.Issues
 	}
 )
