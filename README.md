@@ -15,7 +15,31 @@ Example call: `http://localhost:8080/issues??offset=0&limit=1000`
 
 ```shell
 $ go get github.com/opstalent/tracker
-$ tracker username password
+$ tracker username password port
+```
+
+### Add tracker as service [Debian]
+
+```shell
+$ sudo cp tracker.service /var/init.d/tracker
+$ sudo nano /var/init.d/tracker
+```
+
+Change:
+- your-redmine-user - redmine user
+- your-redmine-password - redmine password
+- service-port - tracker port
+
+```shell
+$ sudo chmod +x /var/init.d/tracker
+$ sudo update-rc.d tracker defaults
+$ sudo update-rc.d tracker enable
+```
+
+now see you service in
+
+```shell
+$ service --status-all
 ```
 
 License

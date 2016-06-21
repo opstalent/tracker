@@ -16,17 +16,19 @@ import (
 
 func main() {
 	var (
-		ctx      context.Context
-		cancel   context.CancelFunc
-		username string
-		password string
-		host     string
-		port     string
-		format   string
+		ctx         context.Context
+		cancel      context.CancelFunc
+		username    string
+		password    string
+		host        string
+		port        string
+		programPort string
+		format      string
 	)
 
 	username = os.Args[1]
 	password = os.Args[2]
+	programPort = os.Args[3]
 
 	flag.StringVar(&host, "f", "redmine.ops-dev.pl", "Set format, default = json")
 	flag.StringVar(&port, "h", "", "Set host, default = redmine.ops-dev.pl")
@@ -44,7 +46,7 @@ func main() {
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./resources/")))
 
 	log := logger.New()
-	log.Critical(ctx, "%s", http.ListenAndServe(":8080", router))
+	log.Critical(ctx, "%s", http.ListenAndServe(":"+programPort, router))
 }
 
 func addRoutes(ctx context.Context) {
