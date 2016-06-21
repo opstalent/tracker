@@ -3,7 +3,7 @@
 # Description:       redmine statistics
 ### END INIT INFO
 
-SCRIPT="cd /var/www/public_html/tracker/ && ./tracker api 12qwaszxroot 8082"
+SCRIPT="cd /var/www/public_html/tracker/ && ./tracker <your-redmine-user> <your-redmine-password> <service-port>"
 
 PIDFILE=/var/run/tracker.pid
 LOGFILE=/var/log/tracker.log
