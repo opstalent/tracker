@@ -1,0 +1,65 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Description:       redmine statistics
+### END INIT INFO
+
+SCRIPT="cd /var/www/public_html/tracker/ && ./tracker api 12qwaszxroot 8082"
+
+PIDFILE=/var/run/tracker.pid
+LOGFILE=/var/log/tracker.log
+RUNAS=root
+
+start() {
+  if [ -f /var/run/$PIDNAME ] && kill -0 $(cat /var/run/$PIDNAME); then
+    echo 'Service already running: $SCRIPT' >&2
+    return 1
+  fi
+  echo 'Starting service…' >&2
+  local CMD="$SCRIPT &> \"$LOGFILE\" & echo \$!"
+  su -c "$CMD" $RUNAS > "$PIDFILE"
+  echo 'Service started' >&2
+}
+
+stop() {
+#  if [ ! -f "$PIDFILE" ] || ! kill -0 $(cat "$PIDFILE"); then
+#    echo 'Service not running' >&2
+#    return 1
+#  fi
+  echo 'Stopping service…' >&2
+  #kill -15 $(cat $PIDFILE) && rm -f "$PIDFILE"
+  for KILLPID in `ps ax | grep 'tracker' | awk ' { print $1;}'`; do 
+    kill -9 $KILLPID;
+  done
+  echo 'Service stopped' >&2
+}
+
+uninstall() {
+  echo -n "Are you really sure you want to uninstall this service? That cannot be undone. [yes|No] "
+  local SURE
+  read SURE
+  if [ "$SURE" = "yes" ]; then
+    stop
+    rm -f "$PIDFILE"
+    echo "Notice: log file is not be removed: '$LOGFILE'" >&2
+    update-rc.d -f tracker remove
+    rm -fv "$0"
+  fi
+}
+
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  uninstall)
+    uninstall
+    ;;
+  restart)
+    stop
+    start
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart|uninstall}"
+esac
