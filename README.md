@@ -22,6 +22,15 @@ $ tracker username password port
 
 ```shell
 $ sudo cp tracker.service /var/init.d/tracker
+$ sudo nano /var/init.d/tracker
+```
+
+Change:
+- your-redmine-user - redmine user
+- your-redmine-password - redmine password
+- service-port - tracker port
+
+```shell
 $ sudo chmod +x /var/init.d/tracker
 $ sudo update-rc.d tracker defaults
 $ sudo update-rc.d tracker enable
