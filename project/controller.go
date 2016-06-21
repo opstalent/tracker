@@ -32,6 +32,7 @@ func viewHandler(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 
 		q := req.URL.Query()
 		q.Set("project_id", strconv.Itoa(project.Id))
+		q.Set("limit", strconv.Itoa(9999))
 		req.URL.RawQuery = q.Encode()
 		is, err := issue.Get(ctx, req)
 
