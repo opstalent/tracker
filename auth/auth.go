@@ -27,9 +27,8 @@ type (
 )
 
 var (
-	DefaultAuth   = newAuth()
 	defaultBroker = Credentials{}
-	defaultApi    = Server{}
+	defaultApi = Server{}
 )
 
 func newAuth(opts ...Option) Auth {
@@ -59,23 +58,25 @@ func (a *auth) Init(opts ...Option) error {
 	return nil
 }
 
-func DefaultOptions() Options {
-	return DefaultAuth.Options()
-}
-
-func Init(opts ...Option) error {
-	return DefaultAuth.Init(opts...)
-}
-
 func FromContext(ctx context.Context) (Auth, bool) {
 	s, ok := ctx.Value(serviceKey{}).(Auth)
 	return s, ok
 }
 
-func NewContext(ctx context.Context, a Auth) context.Context {
-	return context.WithValue(ctx, serviceKey{}, a)
+func New(ctx context.Context, username, password, host, port, format string) context.Context {
+	return context.WithValue(ctx, serviceKey{}, authorize(username, password, host, port, format))
 }
 
-func New(opts ...Option) Auth {
-	return newAuth(opts...)
+func authorize(username, password, host, port, format string) Auth {
+	api := Server{
+		host,
+		port,
+		format,
+	}
+	broker := Credentials{
+		username,
+		password,
+	}
+
+	return newAuth(Api(api), Broker(broker))
 }

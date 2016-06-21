@@ -10,15 +10,15 @@ import (
 
 var (
 	funcs = template.FuncMap{"countTotal": countTotal}
-	tmpl  = template.Must(template.New("list.html").Funcs(funcs).ParseFiles("views/issue/list.html"))
+	tmpl = template.Must(template.New("list.html").Funcs(funcs).ParseFiles("views/issue/list.html"))
 )
 
 type Data struct {
 	List SortedIssues
 }
 
-func ListHandler(ctx context.Context, w http.ResponseWriter, r *http.Request) {
-	issues, err := Get(ctx, r.URL.Query())
+func listHandler(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+	issues, err := get(ctx, r)
 	if err != nil {
 		log := logger.New()
 		log.Critical(ctx, "%s", err)
