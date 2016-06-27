@@ -13,6 +13,15 @@ import (
 	"github.com/opstalent/tracker/router"
 )
 
+var (
+	username = flag.StringVar"u", "login", "Set redmine login, default login")
+	password = flag.StringVar("passwd", "password", "Set redmine password, default password")
+	programPort = flag.StringVar("port", "8080", "Set server port, default 8080")
+	host = flag.StringVar("h", "redmine.ops-dev.pl", "Set host, default = redmine.ops-dev.pl")
+	port = flag.StringVar("p", "", "Set port, default empty")
+	format = flag.StringVar("f", "json", "Set format, default = json")
+)
+
 func main() {
 	var (
 		ctx         context.Context
@@ -24,18 +33,12 @@ func main() {
 		programPort string
 		format      string
 	)
-
-	flag.StringVar(&username, "u", "login", "Set redmine login, default login")
-	flag.StringVar(&password, "passwd", "password", "Set redmine password, default password")
-	flag.StringVar(&programPort, "port", "8080", "Set server port, default 8080")
-	flag.StringVar(&host, "h", "redmine.ops-dev.pl", "Set host, default = redmine.ops-dev.pl")
-	flag.StringVar(&port, "p", "", "Set port, default empty")
-	flag.StringVar(&format, "f", "json", "Set format, default = json")
 	flag.Parse()
 
 	ctx, cancel = context.WithCancel(context.Background())
-	ctx = auth.New(ctx, username, password, host, port, format)
 	defer cancel()
+	
+	ctx = auth.New(ctx, *username, *password, *host, *port, *format)
 
 	issue.AddRoutes(ctx)
 	project.AddRoutes(ctx)
