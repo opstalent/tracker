@@ -38,7 +38,7 @@ func main() {
 	ctx, cancel = context.WithCancel(context.Background())
 	defer cancel()
 	
-	ctx = auth.New(ctx, *username, *password, *host, *port, *format)
+	ctx = auth.New(ctx, username, password, host, port, format)
 
 	issue.AddRoutes(ctx)
 	project.AddRoutes(ctx)
