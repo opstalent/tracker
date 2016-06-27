@@ -14,12 +14,12 @@ import (
 )
 
 var (
-	username = flag.StringVar"u", "login", "Set redmine login, default login")
-	password = flag.StringVar("passwd", "password", "Set redmine password, default password")
-	programPort = flag.StringVar("port", "8080", "Set server port, default 8080")
-	host = flag.StringVar("h", "redmine.ops-dev.pl", "Set host, default = redmine.ops-dev.pl")
-	port = flag.StringVar("p", "", "Set port, default empty")
-	format = flag.StringVar("f", "json", "Set format, default = json")
+	username = flag.String"u", "login", "Set redmine login, default login")
+	password = flag.String("passwd", "password", "Set redmine password, default password")
+	programPort = flag.String("port", "8080", "Set server port, default 8080")
+	host = flag.String("h", "redmine.ops-dev.pl", "Set host, default = redmine.ops-dev.pl")
+	port = flag.String("p", "", "Set port, default empty")
+	format = flag.String("f", "json", "Set format, default = json")
 )
 
 func main() {
