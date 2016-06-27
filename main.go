@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	username = flag.String"u", "login", "Set redmine login, default login")
+	username = flag.String("u", "login", "Set redmine login, default login")
 	password = flag.String("passwd", "password", "Set redmine password, default password")
 	programPort = flag.String("port", "8080", "Set server port, default 8080")
 	host = flag.String("h", "redmine.ops-dev.pl", "Set host, default = redmine.ops-dev.pl")
