@@ -48,5 +48,5 @@ func main() {
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./resources/")))
 
 	log := logger.New()
-	log.Critical(ctx, "%s", http.ListenAndServe(":"+programPort, router))
+	log.Critical(ctx, "%s", http.ListenAndServe(":"+ *programPort, router))
 }
