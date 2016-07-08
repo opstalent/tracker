@@ -20,7 +20,7 @@ type Data struct {
 func listHandler(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	issues, err := Get(ctx, r)
 	if err != nil {
-		env.Env.Log.Critical(ctx, "%s", err)
+		env.Config.Log.Critical(ctx, "%s", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	} else {

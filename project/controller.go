@@ -19,13 +19,13 @@ func viewHandler(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	project, err := GetById(ctx, r, vars["id"])
 	if err != nil {
-		env.Env.Log.Critical(ctx, "%s", err)
+		env.Config.Log.Critical(ctx, "%s", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	} else {
 		req, err := http.NewRequest("GET", "http://notimportant.com", nil)
 		if err != nil {
-			env.Env.Log.Critical(ctx, "%s", err)
+			env.Config.Log.Critical(ctx, "%s", err)
 			http.Error(w, err.Error(), http.StatusBadRequest)
 		}
 

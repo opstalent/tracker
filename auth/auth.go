@@ -28,7 +28,7 @@ type (
 
 var (
 	defaultBroker = Credentials{}
-	defaultApi = Server{}
+	defaultApi    = Server{}
 )
 
 func newAuth(opts ...Option) Auth {

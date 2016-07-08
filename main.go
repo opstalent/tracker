@@ -3,9 +3,7 @@ package main
 import (
 	"flag"
 	"net/http"
-	"strconv"
 
-	en "github.com/caarlos0/env"
 	"github.com/opstalent/tracker/auth"
 	"github.com/opstalent/tracker/env"
 	"github.com/opstalent/tracker/issue"
@@ -14,30 +12,31 @@ import (
 	"golang.org/x/net/context"
 )
 
-//Example program run
-//PRODUCTION=true USERNAME="user" PASSWORD="password" go run tracker.go
+var (
+	username    = flag.String("u", "login", "Set redmine login, default login")
+	password    = flag.String("passwd", "password", "Set redmine password, default password")
+	programPort = flag.String("port", "8080", "Set server port, default 8080")
+	host        = flag.String("h", "redmine.ops-dev.pl", "Set host, default = redmine.ops-dev.pl")
+	port        = flag.String("p", "", "Set port, default empty")
+	format      = flag.String("f", "json", "Set format, default = json")
+)
+
 func main() {
 	var (
 		ctx    context.Context
 		cancel context.CancelFunc
-		host   string
-		port   string
 	)
 
-	flag.StringVar(&host, "h", "redmine.ops-dev.pl", "Set host, default = redmine.ops-dev.pl")
-	flag.StringVar(&port, "p", "", "Set port, default empty")
 	flag.Parse()
 
-	env.Env.Log.Critical(ctx, "%s", en.Parse(&env.Env))
-
 	ctx, cancel = context.WithCancel(context.Background())
-	ctx = auth.New(ctx, env.Env.Username, env.Env.Password, host, port, env.Env.Format)
+	ctx = auth.New(ctx, *username, *password, *host, *port, *format)
 	defer cancel()
 
 	issue.AddRoutes(ctx)
 	project.AddRoutes(ctx)
 
-	env.Env.Router = router.New()
-	env.Env.Router.PathPrefix("/").Handler(http.FileServer(http.Dir("./resources/")))
-	env.Env.Log.Critical(ctx, "%s", http.ListenAndServe(":"+strconv.Itoa(env.Env.Port), env.Env.Router))
+	env.Config.Router = router.New()
+	env.Config.Router.PathPrefix("/").Handler(http.FileServer(http.Dir("./resources/")))
+	env.Config.Log.Critical(ctx, "%s", http.ListenAndServe(":"+*programPort, env.Config.Router))
 }

@@ -17,7 +17,7 @@ func MakeHandler(ctx context.Context, fn handlerFnc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
 
-		env.Env.Log.Info(ctx, "%s\t%s\t%s\t%s",
+		env.Config.Log.Info(ctx, "%s\t%s\t%s\t%s",
 			r.Method,
 			r.RequestURI,
 			time.Since(start))
