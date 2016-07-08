@@ -5,30 +5,13 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/gorilla/mux"
+	en "github.com/caarlos0/env"
 	"github.com/opstalent/tracker/auth"
+	"github.com/opstalent/tracker/env"
 	"github.com/opstalent/tracker/issue"
-	"github.com/opstalent/tracker/logger"
 	"github.com/opstalent/tracker/project"
 	"github.com/opstalent/tracker/router"
-	"github.com/vardius/env"
 	"golang.org/x/net/context"
-)
-
-type enviroment struct {
-	Username     int  `env:"USERNAME",required`
-	Password     int  `env:"PASSWORD",required`
-	IsProduction bool `env:"PRODUCTION"`
-	Port         int  `env:"PORT" envDefault:"8080"`
-	Format       int  `env:"FORMAT" envDefault:"json"`
-	Log          logger.Logger
-	Router       *mux.Router
-}
-
-var (
-	Env = &enviroment{
-		Log: logger.New(),
-	}
 )
 
 //Example program run
@@ -45,17 +28,16 @@ func main() {
 	flag.StringVar(&port, "p", "", "Set port, default empty")
 	flag.Parse()
 
+	env.Env.Log.Critical(ctx, "%s", en.Parse(&env.Env))
+
 	ctx, cancel = context.WithCancel(context.Background())
-	ctx = auth.New(ctx, username, password, host, port, format)
+	ctx = auth.New(ctx, env.Env.Username, env.Env.Password, host, port, env.Env.Format)
 	defer cancel()
 
 	issue.AddRoutes(ctx)
 	project.AddRoutes(ctx)
 
-	Env.Router = router.New()
-
-	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./resources/")))
-
-	Env.Log.Critical(ctx, "%s", env.Parse(&Env))
-	Env.Log.Critical(ctx, "%s", http.ListenAndServe(":"+strconv.Itoa(Env.Port), router))
+	env.Env.Router = router.New()
+	env.Env.Router.PathPrefix("/").Handler(http.FileServer(http.Dir("./resources/")))
+	env.Env.Log.Critical(ctx, "%s", http.ListenAndServe(":"+strconv.Itoa(env.Env.Port), env.Env.Router))
 }

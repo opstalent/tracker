@@ -3,12 +3,12 @@ package project
 import (
 	"html/template"
 	"net/http"
-
-	"github.com/opstalent/tracker/logger"
-	"golang.org/x/net/context"
-	"github.com/gorilla/mux"
-	"github.com/opstalent/tracker/issue"
 	"strconv"
+
+	"github.com/gorilla/mux"
+	"github.com/opstalent/tracker/env"
+	"github.com/opstalent/tracker/issue"
+	"golang.org/x/net/context"
 )
 
 var (
@@ -18,15 +18,14 @@ var (
 func viewHandler(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	project, err := GetById(ctx, r, vars["id"])
-	log := logger.New()
 	if err != nil {
-		log.Critical(ctx, "%s", err)
+		env.Env.Log.Critical(ctx, "%s", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	} else {
 		req, err := http.NewRequest("GET", "http://notimportant.com", nil)
 		if err != nil {
-			log.Critical(ctx, "%s", err)
+			env.Env.Log.Critical(ctx, "%s", err)
 			http.Error(w, err.Error(), http.StatusBadRequest)
 		}
 

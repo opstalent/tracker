@@ -15,7 +15,7 @@ Example call: `http://localhost:8080/issues??offset=0&limit=1000`
 
 ```shell
 $ go get github.com/opstalent/tracker
-$ tracker username password --port=8080
+$ tracker -port=8080 username password 
 ```
 
 ### Add tracker as service [Debian]

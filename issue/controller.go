@@ -4,13 +4,13 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/opstalent/tracker/logger"
+	"github.com/opstalent/tracker/env"
 	"golang.org/x/net/context"
 )
 
 var (
 	funcs = template.FuncMap{"countTotal": countTotal}
-	tmpl = template.Must(template.New("list.html").Funcs(funcs).ParseFiles("views/issue/list.html"))
+	tmpl  = template.Must(template.New("list.html").Funcs(funcs).ParseFiles("views/issue/list.html"))
 )
 
 type Data struct {
@@ -20,8 +20,7 @@ type Data struct {
 func listHandler(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	issues, err := Get(ctx, r)
 	if err != nil {
-		log := logger.New()
-		log.Critical(ctx, "%s", err)
+		env.Env.Log.Critical(ctx, "%s", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	} else {

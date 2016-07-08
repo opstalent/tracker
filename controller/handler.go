@@ -1,12 +1,12 @@
 package controller
 
 import (
+	"encoding/json"
 	"net/http"
 	"time"
 
-	"github.com/opstalent/tracker/logger"
+	"github.com/opstalent/tracker/env"
 	"golang.org/x/net/context"
-	"encoding/json"
 )
 
 type (
@@ -16,9 +16,8 @@ type (
 func MakeHandler(ctx context.Context, fn handlerFnc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
-		log := logger.New()
 
-		log.Info(ctx, "%s\t%s\t%s\t%s",
+		env.Env.Log.Info(ctx, "%s\t%s\t%s\t%s",
 			r.Method,
 			r.RequestURI,
 			time.Since(start))
@@ -30,7 +29,7 @@ func MakeHandler(ctx context.Context, fn handlerFnc) http.HandlerFunc {
 func CallAPI(ctx context.Context, r *http.Request, url string, entity interface{}) error {
 	var (
 		err error
-		req    *http.Request
+		req *http.Request
 	)
 
 	req, err = http.NewRequest("GET", url, nil)
