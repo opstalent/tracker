@@ -9,6 +9,7 @@ import (
 	"github.com/opstalent/tracker/env"
 	"github.com/opstalent/tracker/issue"
 	"github.com/opstalent/tracker/resource"
+	"github.com/opstalent/tracker/user"
 	"golang.org/x/net/context"
 )
 
@@ -35,7 +36,7 @@ func viewHandler(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 		q.Set("project_id", strconv.Itoa(project.Id))
 		q.Set("limit", strconv.Itoa(9999))
 		req.URL.RawQuery = q.Encode()
-		is, err := issue.Get(ctx, req)
+		is, err := issue.Get(ctx, req, &user.User{})
 
 		project.Issues = issue.SortByStatus(is)
 

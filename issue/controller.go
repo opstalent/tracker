@@ -1,10 +1,12 @@
 package issue
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
 
 	"github.com/opstalent/tracker/env"
+	"github.com/opstalent/tracker/user"
 	"golang.org/x/net/context"
 )
 
@@ -18,7 +20,19 @@ type Data struct {
 }
 
 func listHandler(ctx context.Context, w http.ResponseWriter, r *http.Request) {
-	issues, err := Get(ctx, r)
+	var issues = &Issues{}
+	users, err := user.Get(ctx, r)
+	fmt.Println("USERS")
+	fmt.Println(users)
+	for _, user := range users.Resources {
+		if is, err := Get(ctx, r, &user); err == nil {
+			fmt.Println("LOOP")
+			fmt.Println(is)
+			issues.Resources = append(issues.Resources, is.Resources...)
+		}
+	}
+	fmt.Println("ISSUES")
+	fmt.Println(issues)
 	if err != nil {
 		env.Config.Log.Critical(ctx, "%s", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
