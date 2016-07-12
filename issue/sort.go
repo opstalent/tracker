@@ -42,3 +42,23 @@ func makeStatusMap(m map[string]map[string][]Issue, path string) {
 		m[path] = mm
 	}
 }
+
+func SortByStatus(issues *Issues) map[string][]Issue {
+	sorted := make(map[string][]Issue)
+	for _, issue := range issues.Resources {
+		sorted[issue.Status.Name] = append(sorted[issue.Status.Name], issue)
+	}
+
+	return sorted
+}
+
+func SortByUser(issues *Issues) map[string][]Issue {
+	sorted := make(map[string][]Issue)
+	for _, issue := range issues.Resources {
+		if len(issue.AssignedTo.Name) != 0 {
+			sorted[issue.AssignedTo.Name] = append(sorted[issue.AssignedTo.Name], issue)
+		}
+	}
+
+	return sorted
+}

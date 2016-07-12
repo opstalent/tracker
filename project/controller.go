@@ -8,11 +8,13 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/opstalent/tracker/env"
 	"github.com/opstalent/tracker/issue"
+	"github.com/opstalent/tracker/resource"
 	"golang.org/x/net/context"
 )
 
 var (
-	tmpl = template.Must(template.New("view.html").ParseFiles("views/project/view.html"))
+	funcs = template.FuncMap{"getUsers": getUsers}
+	tmpl  = template.Must(template.New("view.html").Funcs(funcs).ParseFiles("views/project/view.html"))
 )
 
 func viewHandler(ctx context.Context, w http.ResponseWriter, r *http.Request) {
@@ -35,7 +37,7 @@ func viewHandler(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 		req.URL.RawQuery = q.Encode()
 		is, err := issue.Get(ctx, req)
 
-		project.Issues = is
+		project.Issues = issue.SortByStatus(is)
 
 		render(w, project)
 	}
@@ -48,4 +50,15 @@ func render(w http.ResponseWriter, args *Project) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+}
+
+func getUsers(is []issue.Issue) map[string]resource.Field {
+	users := make(map[string]resource.Field)
+	for _, issue := range is {
+		_, ok := users[issue.AssignedTo.Name]
+		if len(issue.AssignedTo.Name) != 0 && !ok {
+			users[issue.AssignedTo.Name] = issue.AssignedTo
+		}
+	}
+	return users
 }
