@@ -8,14 +8,29 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/opstalent/tracker/env"
 	"github.com/opstalent/tracker/issue"
-	"github.com/opstalent/tracker/resource"
 	"github.com/opstalent/tracker/user"
 	"golang.org/x/net/context"
 )
 
 var (
-	funcs = template.FuncMap{"getUsers": getUsers}
-	tmpl  = template.Must(template.New("view.html").Funcs(funcs).ParseFiles("views/project/view.html"))
+	funcs = template.FuncMap{
+		"getUsers": func(is []issue.Issue) map[string]int {
+			users := make(map[string]int)
+			for _, issue := range is {
+				if len(issue.AssignedTo.Name) != 0 {
+					users[issue.AssignedTo.Name] += 1
+				}
+			}
+			return users
+		},
+		"statusIdOfFirst": func(is []issue.Issue) int {
+			for _, issue := range is {
+				return issue.Status.Id
+			}
+			return 0
+		},
+	}
+	tmpl = template.Must(template.New("view.html").Funcs(funcs).ParseFiles("views/project/view.html"))
 )
 
 func viewHandler(ctx context.Context, w http.ResponseWriter, r *http.Request) {
@@ -51,15 +66,4 @@ func render(w http.ResponseWriter, args *Project) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-}
-
-func getUsers(is []issue.Issue) map[string]resource.Field {
-	users := make(map[string]resource.Field)
-	for _, issue := range is {
-		_, ok := users[issue.AssignedTo.Name]
-		if len(issue.AssignedTo.Name) != 0 && !ok {
-			users[issue.AssignedTo.Name] = issue.AssignedTo
-		}
-	}
-	return users
 }

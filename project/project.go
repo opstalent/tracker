@@ -14,7 +14,7 @@ const (
 type (
 	Project struct {
 		Id          int            `json:"id"`
-		identifier  string         `json:"identifier"`
+		Identifier  string         `json:"identifier"`
 		Name        string         `json:"name"`
 		Description string         `json:"description"`
 		Homepage    string         `json:"homepage"`

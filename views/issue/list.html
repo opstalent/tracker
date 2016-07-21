@@ -29,6 +29,10 @@
         </div>
     </nav>
 
+	<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="/bower_components/morrisjs/morris.min.js"></script>
+	<script src="/bower_components/raphael/raphael-min.js"></script>
+					
     <div id="page-wrapper">
         <div id="userCarousel" class="carousel slide" data-ride="carousel" data-interval="5000" data-wrap="true">
             <div class="carousel-inner" role="listbox">
@@ -79,9 +83,8 @@
                         </div>
                         {{ end }}
                     </div>
-
                     <div class="row">
-                        <div class="col-lg-8">
+                        <!--<div class="col-lg-8">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <i class="fa fa-bar-chart-o fa-fw"></i> Charts Example
@@ -97,17 +100,27 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
                         <div class="col-lg-4">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <i class="fa fa-bar-chart-o fa-fw"></i> Chart Example
                                 </div>
                                 <div class="panel-body">
-                                    <div id="morris-donut-chart"></div>
+                                    <div id="{{ userSlug $uName }}-donut-chart"></div>
                                 </div>
                             </div>
                         </div>
+						<script>
+							(function() {
+								Morris.Donut({
+							        element: "{{ userSlug $uName }}-donut-chart",
+									data: {{ getDonut $users }},
+							        resize: true,
+							        labelColor: '#2e2a37',
+							    });
+							})();
+						</script>
                     </div>
                 </div>
                 {{ end }}
@@ -126,10 +139,7 @@
     </div>
 </div>
 
-<script src="/bower_components/jquery/dist/jquery.min.js"></script>
 <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="/bower_components/raphael/raphael-min.js"></script>
-<script src="/bower_components/morrisjs/morris.min.js"></script>
 <script src="/js/morris-data.js"></script>
 </body>
 </html>

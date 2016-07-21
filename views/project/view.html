@@ -35,6 +35,7 @@
                 <h1 class="page-header"><a href="{{ .Homepage }}">{{ .Name }}</a></h1>
             </div>
         </div>
+		{{ $identifier := .Identifier }}
         <div class="row">
             {{ range $sName, $issues := .Issues }}
 	            <div class="col-lg-3 col-md-6">
@@ -46,14 +47,14 @@
 	                            </div>
 	                            <div class="col-xs-9 text-right">
 	                                <div class="huge">{{ len $issues }}</div>
-	                                <div class="big">{{ $sName }}</div>
+	                                <div class="big"><a href="http://redmine.ops-dev.pl/projects/{{ $identifier }}/issues?set_filter=1&f[]=status_id&op[status_id]==&v[status_id][]={{ statusIdOfFirst $issues }}">{{ $sName }}</a></div>
 	                            </div>
 	                        </div>
 	                        <div class="row">
 	                            <div class="col-xs-12">
 	                            	<hr>
-            						{{ range $name, $user := getUsers $issues }}
-	                                	<p>{{ $name }}</p>
+            						{{ range $name, $count := getUsers $issues }}
+	                                	<p>{{ $name }} {{ $count }}</p>
             						{{ end }}
 	                            </div>
 	                        </div>
@@ -65,11 +66,7 @@
     </div>
 </div>
 
-<script src="/bower_components/jquery/dist/jquery.min.js"></script>
 <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="/bower_components/raphael/raphael-min.js"></script>
-<script src="/bower_components/morrisjs/morris.min.js"></script>
-<script src="/js/morris-data.js"></script>
 
 </body>
 </html>
