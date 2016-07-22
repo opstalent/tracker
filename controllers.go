@@ -21,7 +21,7 @@ func issueListHandler(ctx context.Context, w http.ResponseWriter, r *http.Reques
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
-	Render(w, list, users)
+	Render(w, issueListTemplate, users)
 }
 
 func projectViewHandler(ctx context.Context, w http.ResponseWriter, r *http.Request, c *goapi.Context) {
@@ -51,7 +51,7 @@ func projectViewHandler(ctx context.Context, w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	Render(w, projectView, struct {
+	Render(w, projectViewTemplate, struct {
 		Project *Project
 		Issues  *Issues
 	}{project, issues})

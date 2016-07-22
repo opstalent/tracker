@@ -11,11 +11,11 @@ import (
 )
 
 var (
-	projectView = template.Must(template.New("view.html").Funcs(template.FuncMap{
+	projectViewTemplate = template.Must(template.New("view.html").Funcs(template.FuncMap{
 		"getUsers":        getUsers,
 		"statusIdOfFirst": statusIdOfFirst,
 	}).ParseFiles("views/projects/view.html"))
-	issueList = template.Must(template.New("list.html").Funcs(template.FuncMap{
+	issueListTemplate = template.Must(template.New("list.html").Funcs(template.FuncMap{
 		"getDonut":            getDonut,
 		"getUserIssues":       getUserIssues,
 		"getIssuesPerProject": getIssuesPerProject,
@@ -78,7 +78,7 @@ func getDonut(issues SortedIssues) template.JS {
 	}
 	b, err := json.Marshal(data)
 	if err != nil {
-		env.Log.Info(ctx, "%s", err)
+		env.Log.Info(context.TODO(), "%s", err)
 		return ""
 	}
 	return template.JS(b)
