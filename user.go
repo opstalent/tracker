@@ -28,6 +28,6 @@ type (
 )
 
 func (users *Users) Get(ctx context.Context, r *http.Request) error {
-	url := redmine.GetUrl("users")
+	url := redmine.GetURL("users")
 	return redmine.CallAPI(ctx, r, url, users)
 }

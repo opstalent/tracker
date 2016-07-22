@@ -16,7 +16,7 @@ var (
 	Format   = flag.String("f", "json", "Set format, default = json")
 )
 
-func GetUrl(params ...string) string {
+func GetURL(params ...string) string {
 	if len(params) < 1 {
 		panic("redmine: redmine.GetUrl method, not enought params!")
 	}

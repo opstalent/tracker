@@ -31,7 +31,7 @@ type (
 )
 
 func (projects *Projects) Get(ctx context.Context, r *http.Request, user *User) error {
-	url := redmine.GetUrl("projects")
+	url := redmine.GetURL("projects")
 	if user.Id > 0 {
 		url += "?assigned_to_id=" + strconv.Itoa(user.Id)
 	}
@@ -43,6 +43,6 @@ func (project *Project) Get(ctx context.Context, r *http.Request, id string) err
 		Project *Project `json:"project"`
 	}
 	data.Project = project
-	url := redmine.GetUrl("projects", id)
+	url := redmine.GetURL("projects", id)
 	return redmine.CallAPI(ctx, r, url, &data)
 }

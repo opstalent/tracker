@@ -37,7 +37,7 @@ type (
 )
 
 func (issues *Issues) Get(ctx context.Context, r *http.Request, user *User) error {
-	url := redmine.GetUrl("issues")
+	url := redmine.GetURL("issues")
 	if user != nil && user.Id > 0 {
 		url += "?assigned_to_id=" + strconv.Itoa(user.Id)
 	}
