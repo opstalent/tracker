@@ -118,12 +118,18 @@
 	                        </div>
 							<script>
 								(function() {
+                                    $('#userCarousel').bind('slide.bs.carousel', function (e) {
+                                        $(window).trigger('resize');
+                                    });
+
 									Morris.Donut({
 								        element: "{{ $user.Login }}-donut-chart",
 										data: {{ getDonut $issuesByStatus }},
 								        resize: true,
 								        labelColor: '#2e2a37',
 								    });
+
+                                    $(window).trigger('resize');
 								})();
 							</script>					
 						{{ end }}
