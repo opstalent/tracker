@@ -32,9 +32,20 @@
 	<script src="/bower_components/jquery/dist/jquery.min.js"></script>
 	<script src="/bower_components/morrisjs/morris.min.js"></script>
 	<script src="/bower_components/raphael/raphael-min.js"></script>
-					
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.matchHeight/0.7.0/jquery.matchHeight-min.js"></script>
+
     <div id="page-wrapper">
-        <div id="userCarousel" class="carousel slide" data-ride="carousel" data-interval="5000" data-wrap="true">
+        <div id="userCarousel" class="carousel slide" data-ride="carousel" data-interval="50000000" data-wrap="true">
+            <div class="pull-right">
+                <a class="left" href="#userCarousel" role="button" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="right" href="#userCarousel" role="button" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
             <div class="carousel-inner" role="listbox">
                 {{ range $index, $user := .Resources }}
                 <div class="item">
@@ -50,63 +61,47 @@
 					{{ $issues := getUserIssues $user }}
 					{{ $issuesByStatus := $issues.SortByStatus }}
                     <div class="row">
+                        <div class="col-lg-6">
 					{{with $issuesByStatus }}
                         {{ range $sName, $issues2 := $issuesByStatus }}
-                        <div class="col-lg-3 col-md-6">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    <div class="row">
-                                        <div class="col-xs-3">
-                                            <i class="fa fa-tasks fa-5x"></i>
-                                        </div>
-                                        <div class="col-xs-9 text-right">
-                                            <div class="huge">{{ len $issues2 }}</div>
-                                            <div class="big">{{ $sName }}</div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xs-12">
-                                            <hr>
-                                            {{ range $pName, $issues3 := getIssuesPerProject $issues2 }}
-                                            <p>
-                                                {{ $length := len $issues3 }}
-                                                    {{ if gt $length 0 }}
-                                                    {{ $issue := index $issues3 0 }}
-                                                    <a href="/projects/{{ $issue.Project.Id }}">{{ $pName }}</a>
-                                                {{ else }}
-                                                    {{ $pName }}
-                                                {{ end }}
-                                                : {{ len $issues3 }}
-                                            </p>
-                                            {{ end }}
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="panel panel-primary equal">
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <i class="fa fa-tasks fa-5x"></i>
+                                                </div>
+                                                <div class="col-xs-9 text-right">
+                                                    <div class="huge">{{ len $issues2 }}</div>
+                                                    <div class="big">{{ $sName }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <hr>
+                                                    {{ range $pName, $issues3 := getIssuesPerProject $issues2 }}
+                                                    <p>
+                                                        {{ $length := len $issues3 }}
+                                                            {{ if gt $length 0 }}
+                                                            {{ $issue := index $issues3 0 }}
+                                                            <a href="/projects/{{ $issue.Project.Id }}">{{ $pName }}</a>
+                                                        {{ else }}
+                                                            {{ $pName }}
+                                                        {{ end }}
+                                                        : {{ len $issues3 }}
+                                                    </p>
+                                                    {{ end }}
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        {{ end }}					
+                        {{ end }}
 					{{ end }}
                     </div>
-                    <div class="row">
-                        <!--<div class="col-lg-8">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <i class="fa fa-bar-chart-o fa-fw"></i> Charts Example
-                                </div>
-                                <div class="panel-body">
-                                    <div class="row">
-                                        <div class="col-lg-7">
-                                            <div id="morris-area-chart"></div>
-                                        </div>
-                                        <div class="col-lg-5">
-                                            <div id="morris-bar-chart"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>-->
+                    <div class="col-lg-6">
 						{{with $issuesByStatus }}
-	                        <div class="col-lg-4">
+	                        <div class="col-lg-12">
 	                            <div class="panel panel-default">
 	                                <div class="panel-heading">
 	                                    <i class="fa fa-bar-chart-o fa-fw"></i> Chart Example
@@ -127,29 +122,26 @@
 										data: {{ getDonut $issuesByStatus }},
 								        resize: true,
 								        labelColor: '#2e2a37',
+                                        colors: ['#E40046', '#C6003B' , '#FF004D' , '#A90033' , '#840028', '#FF3774', '#FF4B82']
 								    });
-
-                                    $(window).trigger('resize');
 								})();
-							</script>					
+							</script>
 						{{ end }}
                     </div>
+                </div>
                 </div>
                 {{ end }}
             </div>
 
-            <a class="left" href="#userCarousel" role="button" data-slide="prev">
-                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="right" href="#userCarousel" role="button" data-slide="next">
-                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
-
         </div>
     </div>
 </div>
+<script>
+    $(function() {
+        $(window).trigger('resize');
+        $('.equal').matchHeight();
+    });
+</script>
 
 <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="/js/morris-data.js"></script>
