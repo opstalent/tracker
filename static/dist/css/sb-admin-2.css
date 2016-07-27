@@ -4,6 +4,17 @@
  * For details, see http://www.apache.org/licenses/LICENSE-2.0.
  */
 
+.Done {
+    background: #5cb85c !important;
+    border-color: #5cb85c  !important;
+}
+
+.Progress {
+    background: #ffe300 !important;
+    border-color: #ffe300  !important;
+}
+
+
 body {
     background-color: #ffffff;
 }
