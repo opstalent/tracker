@@ -48,88 +48,115 @@
             </div>
             <div class="carousel-inner" role="listbox">
                 {{ range $index, $user := .Resources }}
-                <div class="item">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <h1 class="page-header">
-                                <i class="fa fa-user"></i>
-                                {{ $user.FirstName }} {{ $user.LastName }}
-                            </h1>
-                        </div>
-                    </div>
-
-					{{ $issues := getUserIssues $user }}
-					{{ $issuesByStatus := $issues.SortByStatus }}
-                    <div class="row">
-                        <div class="col-lg-6">
-					{{with $issuesByStatus }}
-                        {{ range $sName, $issues2 := $issuesByStatus }}
-                                <div class="col-lg-6 col-md-6">
-                                    <div class="panel panel-primary equal {{ $sName }}" >
-                                        <div class="panel-heading {{ $sName }}" >
-                                            <div class="row">
-                                                <div class="col-xs-3">
-                                                    <i class="fa fa-tasks fa-5x "></i>
-                                                </div>
-                                                <div class="col-xs-9 text-right">
-                                                    <div class="huge">{{ len $issues2 }}</div>
-                                                    <div class="big">{{ $sName }}</div>
+                    {{ $issues := getUserIssues $user }}
+                    {{ $issuesByStatus := $issues.SortByStatus }}
+                    {{ $issuelen := len $issuesByStatus }}
+                        <div class="item">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <h1 class="page-header">
+                                        <i class="fa fa-user"></i>
+                                        {{ $user.FirstName }} {{ $user.LastName }} {{ $issuelen }}
+                                    </h1>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    {{ range $sName, $issues2 := $issuesByStatus }}
+                                        <div class="col-lg-6 col-md-6">
+                                                <div class="panel panel-primary equal {{ $sName }}" >
+                                                    <div class="panel-heading {{ $sName }}" >
+                                                        <div class="row">
+                                                            <div class="col-xs-3">
+                                                                <i class="fa fa-tasks fa-5x "></i>
+                                                            </div>
+                                                            <div class="col-xs-9 text-right">
+                                                                <div class="huge">{{ len $issues2 }}</div>
+                                                                <div class="big">{{ $sName }}</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-xs-12">
+                                                                <hr>
+                                                                {{ range $pName, $issues3 := getIssuesPerProject $issues2 }}
+                                                                <p>
+                                                                    {{ $length := len $issues3 }}
+                                                                        {{ if gt $length 0 }}
+                                                                        {{ $issue := index $issues3 0 }}
+                                                                        <a href="/projects/{{ $issue.Project.Id }}">{{ $pName }}</a>
+                                                                    {{ else }}
+                                                                        {{ $pName }}
+                                                                    {{ end }}
+                                                                    : {{ len $issues3 }}
+                                                                </p>
+                                                                {{ end }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-xs-12">
-                                                    <hr>
-                                                    {{ range $pName, $issues3 := getIssuesPerProject $issues2 }}
-                                                    <p>
-                                                        {{ $length := len $issues3 }}
-                                                            {{ if gt $length 0 }}
-                                                            {{ $issue := index $issues3 0 }}
-                                                            <a href="/projects/{{ $issue.Project.Id }}">{{ $pName }}</a>
-                                                        {{ else }}
-                                                            {{ $pName }}
-                                                        {{ end }}
-                                                        : {{ len $issues3 }}
-                                                    </p>
-                                                    {{ end }}
+                                    {{ end }}
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="col-lg-12">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <i class="fa fa-bar-chart-o fa-fw"></i> Chart Example
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div id="{{ $user.Login }}-donut-chart"></div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                        {{ end }}
-					{{ end }}
-                    </div>
-                    <div class="col-lg-6">
-						{{with $issuesByStatus }}
-	                        <div class="col-lg-12">
-	                            <div class="panel panel-default">
-	                                <div class="panel-heading">
-	                                    <i class="fa fa-bar-chart-o fa-fw"></i> Chart Example
-	                                </div>
-	                                <div class="panel-body">
-	                                    <div id="{{ $user.Login }}-donut-chart"></div>
-	                                </div>
-	                            </div>
-	                        </div>
-							<script>
-								(function() {
-                                    $('#userCarousel').bind('slide.bs.carousel', function (e) {
-                                        $(window).trigger('resize');
-                                    });
+                                    <script>
+                                            (function() {
+                                                $('#userCarousel').bind('slide.bs.carousel', function (e) {
+                                                    $(window).trigger('resize');
+                                                });
+                                                var colors = [];
+                                                var data = {{ getDonut $issuesByStatus }};
 
-									Morris.Donut({
-								        element: "{{ $user.Login }}-donut-chart",
-										data: {{ getDonut $issuesByStatus }},
-								        resize: true,
-								        labelColor: '#2e2a37',
-                                        colors: ['#5cb85c', '#ffe300' , '#FF004D' , '#C44369' , '#840028', '#FF3774', '#FF4B82']
-								    });
-								})();
-							</script>
-						{{ end }}
-                    </div>
-                </div>
-                </div>
+                                                for(var index in data) {
+                                                    switch (data[index].label) {
+                                                        case 'Done':
+                                                            colors.push("#5cb85c");
+                                                            break;
+                                                        case 'In Progress':
+                                                            colors.push("#ffe300");
+                                                            break;
+                                                        case 'To review':
+                                                            colors.push("#8cd401");
+                                                            break;
+                                                        case 'In review':
+                                                            colors.push("#438543");
+                                                            break;
+                                                        case 'Reopen':
+                                                            colors.push("#0079e4");
+                                                            break;
+                                                        case 'Impediment':
+                                                            colors.push("#e40046");
+                                                            break;
+                                                        case 'Open':
+                                                            colors.push("#00e493");
+                                                            break;
+                                                        default:
+                                                            colors.push("#000000");
+                                                            break;
+                                                    }
+                                                }
+
+                                                Morris.Donut({
+                                                    element: "{{ $user.Login }}-donut-chart",
+                                                    data: data,
+                                                    resize: true,
+                                                    labelColor: '#2e2a37',
+                                                    colors: colors
+                                                });
+                                            })();
+                                        </script>
+                                </div>
+                            </div>
+                        </div>
                 {{ end }}
             </div>
 

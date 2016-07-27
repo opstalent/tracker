@@ -14,6 +14,31 @@
     border-color: #ffe300  !important;
 }
 
+.To.review {
+    background: #8cd401 !important;
+    border-color: #8cd401  !important;
+}
+
+.In.review {
+    background: #438543 !important;
+    border-color: #438543  !important;
+}
+
+.Reopen {
+    background: #0079e4 !important;
+    border-color: #0079e4  !important;
+}
+
+.Impediment {
+    background: #e40046 !important;
+    border-color: #e40046  !important;
+}
+
+.Open {
+    background: #00e493 !important;
+    border-color: #00e493  !important;
+}
+
 
 body {
     background-color: #ffffff;
@@ -391,4 +416,8 @@ table.dataTable thead .sorting:after {
 
 .panel-yellow a:hover {
     color: #df8a13;
+}
+
+.panel p a {
+    color: #ffffff;
 }
