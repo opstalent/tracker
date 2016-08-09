@@ -4,8 +4,44 @@
  * For details, see http://www.apache.org/licenses/LICENSE-2.0.
  */
 
+.Done {
+    background: #5cb85c !important;
+    border-color: #5cb85c  !important;
+}
+
+.Progress {
+    background: #ffe300 !important;
+    border-color: #ffe300  !important;
+}
+
+.To.review {
+    background: #8cd401 !important;
+    border-color: #8cd401  !important;
+}
+
+.In.review {
+    background: #438543 !important;
+    border-color: #438543  !important;
+}
+
+.Reopen {
+    background: #0079e4 !important;
+    border-color: #0079e4  !important;
+}
+
+.Impediment {
+    background: #e40046 !important;
+    border-color: #e40046  !important;
+}
+
+.Open {
+    background: #00e493 !important;
+    border-color: #00e493  !important;
+}
+
+
 body {
-    background-color: #f8f8f8;
+    background-color: #ffffff;
 }
 
 p{
@@ -14,6 +50,10 @@ p{
 
 #wrapper {
     width: 100%;
+}
+
+.page-header {
+    margin: 0 0 20px;
 }
 
 #page-wrapper {
@@ -37,6 +77,7 @@ p{
 }
 .panel-primary{
     border: 1px solid #e40046;
+    background: #e40046;
 }
 .panel-primary>.panel-heading{
     background: #e40046;
@@ -375,4 +416,8 @@ table.dataTable thead .sorting:after {
 
 .panel-yellow a:hover {
     color: #df8a13;
+}
+
+.panel p a {
+    color: #ffffff;
 }
