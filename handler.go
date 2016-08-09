@@ -6,14 +6,14 @@ import (
 	"time"
 
 	env "github.com/opstalent/tracker/enviroment"
-	"github.com/vardius/goapi"
+	"github.com/vardius/goserver"
 	"golang.org/x/net/context"
 )
 
-type HandlerFunc func(context.Context, http.ResponseWriter, *http.Request, *goapi.Context)
+type HandlerFunc func(context.Context, http.ResponseWriter, *http.Request, *goserver.Context)
 
-func NewHandler(h HandlerFunc) goapi.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request, c *goapi.Context) {
+func NewHandler(h HandlerFunc) goserver.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request, c *goserver.Context) {
 		start := time.Now()
 		ctx, cancel, err := newContext(r)
 		if err != nil {

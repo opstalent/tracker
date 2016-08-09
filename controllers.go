@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	env "github.com/opstalent/tracker/enviroment"
-	"github.com/vardius/goapi"
+	"github.com/vardius/goserver"
 	"golang.org/x/net/context"
 )
 
@@ -14,7 +14,7 @@ func init() {
 	env.Server.GET("/issues", NewHandler(issueListHandler))
 }
 
-func issueListHandler(ctx context.Context, w http.ResponseWriter, r *http.Request, c *goapi.Context) {
+func issueListHandler(ctx context.Context, w http.ResponseWriter, r *http.Request, c *goserver.Context) {
 	var users = new(Users)
 	if err := users.Get(ctx, r); err != nil {
 		env.Log.Critical(ctx, "%s", err)
@@ -24,7 +24,7 @@ func issueListHandler(ctx context.Context, w http.ResponseWriter, r *http.Reques
 	Render(w, issueListTemplate, users)
 }
 
-func projectViewHandler(ctx context.Context, w http.ResponseWriter, r *http.Request, c *goapi.Context) {
+func projectViewHandler(ctx context.Context, w http.ResponseWriter, r *http.Request, c *goserver.Context) {
 	var project = new(Project)
 	if err := project.Get(ctx, r, c.Params["id"]); err != nil {
 		env.Log.Critical(ctx, "%s", err)

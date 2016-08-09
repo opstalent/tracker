@@ -1,11 +1,11 @@
 package env
 
 import (
-	"github.com/vardius/goapi"
 	"github.com/vardius/golog"
+	"github.com/vardius/goserver"
 )
 
 var (
 	Log    = golog.New()
-	Server = goapi.New()
+	Server = goserver.New()
 )
